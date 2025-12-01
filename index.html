@@ -2,18 +2,19 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Carga Taller GNC</title>
+  <title>Carga Taller GNC · Quirgroup</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root{
-      --rojo:#d50000;
-      --rojo-osc:#a80000;
       --amarillo:#ffd600;
-      --fondo:#f4f4f4;
+      --rojo:#e3000b;
+      --azul:#003a70;
+
+      --fondo:#f1f3f6;
       --card:#ffffff;
-      --borde:#dddddd;
+      --borde:#d4d7dd;
       --texto:#111111;
-      --texto-suave:#666666;
+      --texto-suave:#6b7280;
     }
 
     *{
@@ -24,56 +25,172 @@
     body{
       margin:0;
       padding:10px;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
       background:var(--fondo);
       color:var(--texto);
+      font-size:16px;
     }
 
+    /* INTRO SOLO LOGO */
+    .splash-overlay{
+      position:fixed;
+      inset:0;
+      background:radial-gradient(circle at 10% 0%, #0b1935 0, #020617 45%, #000000 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:999;
+      transition:opacity .6s ease, transform .6s ease, visibility .6s ease;
+    }
+
+    .splash-overlay.splash-hidden{
+      opacity:0;
+      visibility:hidden;
+      transform:scale(1.03);
+      pointer-events:none;
+    }
+
+    .splash-logo{
+      animation:logoFloat 1.8s ease-in-out infinite alternate;
+    }
+
+    .marca-splash{
+      display:inline-flex;
+      align-items:center;
+      padding:5px 16px 6px;
+      border-radius:999px;
+      background:var(--amarillo);
+      box-shadow:0 0 0 2px rgba(0,0,0,.4), 0 10px 24px rgba(0,0,0,.9);
+      transform:scale(1.15);
+    }
+
+    .marca-splash span.quir{
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      font-size:14px;
+      color:var(--rojo);
+      margin-right:4px;
+    }
+
+    .marca-splash span.group{
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:13px;
+      color:#111111;
+    }
+
+    .marca-splash span.gnc-pill{
+      margin-left:6px;
+      padding:2px 8px 3px;
+      border-radius:999px;
+      background:var(--azul);
+      color:var(--amarillo);
+      font-weight:700;
+      font-size:11px;
+      letter-spacing:.16em;
+    }
+
+    @keyframes logoFloat{
+      from{ transform:translateY(0) scale(1.15); }
+      to{ transform:translateY(-4px) scale(1.2); }
+    }
+
+    /* APP PRINCIPAL */
+
     .app{
-      max-width:420px;
-      margin:0 auto;
+      width:100%;
+      max-width:480px;
       background:var(--card);
-      border-radius:18px;
-      box-shadow:0 8px 18px rgba(0,0,0,.12);
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.12);
       padding:14px 14px 18px;
     }
 
     .topbar{
       display:flex;
       align-items:center;
-      justify-content:center;
+      justify-content:space-between;
       padding:4px 0 10px;
       border-bottom:1px solid var(--borde);
+      margin-bottom:6px;
     }
 
-    .topbar h1{
-      font-size:18px;
+    .marca{
+      display:inline-flex;
+      align-items:center;
+      padding:3px 12px 4px;
+      border-radius:999px;
+      background:var(--amarillo);
+      box-shadow:0 0 0 1px rgba(0,0,0,.15);
+    }
+
+    .marca span.quir{
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-size:12px;
+      color:var(--rojo);
+      margin-right:3px;
+    }
+
+    .marca span.group{
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      font-size:11px;
+      color:#111111;
+    }
+
+    .marca span.gnc-pill{
+      margin-left:6px;
+      padding:1px 6px 2px;
+      border-radius:999px;
+      background:var(--azul);
+      color:var(--amarillo);
+      font-weight:700;
+      font-size:10px;
+      letter-spacing:.12em;
+    }
+
+    .topbar-titulos{
+      text-align:right;
+      margin-left:12px;
+      flex:1;
+    }
+
+    .topbar-titulos h1{
+      font-size:16px;
       margin:0;
       font-weight:700;
-      letter-spacing:.03em;
+      letter-spacing:.12em;
       text-transform:uppercase;
-      color:var(--rojo-osc);
+      color:var(--azul);
     }
 
     .subfecha{
-      text-align:center;
       font-size:12px;
       color:var(--texto-suave);
-      margin-top:2px;
+      margin:2px 0 0;
     }
 
     .tabs{
-      margin:10px 0 12px;
+      margin:12px 0;
       display:flex;
-      background:#f0f0f0;
+      background:#e5e7eb;
       border-radius:999px;
-      padding:3px;
+      padding:4px;
     }
 
     .tab{
       flex:1;
       border:none;
       border-radius:999px;
-      padding:6px 0;
+      padding:8px 0;
       font-size:14px;
       font-weight:600;
       cursor:pointer;
@@ -83,32 +200,37 @@
     }
 
     .tab.activa{
-      background:var(--rojo);
-      color:#fff;
+      background:var(--azul);
+      color:#ffffff;
       box-shadow:0 2px 6px rgba(0,0,0,.25);
     }
 
     .panel{
-      border-radius:14px;
+      border-radius:16px;
       border:1px solid var(--borde);
-      padding:10px 10px 12px;
-      margin-bottom:10px;
-      background:#fafafa;
+      padding:12px 12px 14px;
+      margin-bottom:12px;
+      background:#f9fafb;
     }
 
     .panel-titulo{
       font-size:14px;
       font-weight:600;
       margin-bottom:6px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--azul);
     }
 
     .resumen-linea{
       font-size:13px;
       margin:0;
+      color:var(--texto-suave);
     }
 
     .resumen-linea span{
       font-weight:600;
+      color:var(--texto);
     }
 
     .ultima-actualizacion{
@@ -118,18 +240,19 @@
     }
 
     .grupo-campos{
-      margin-top:8px;
+      margin-top:10px;
     }
 
     .campo{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      margin-bottom:6px;
+      margin-bottom:8px;
+      gap:6px;
     }
 
     .campo-label{
-      font-size:13px;
+      font-size:14px;
       flex:1.1;
     }
 
@@ -142,116 +265,171 @@
     }
 
     .campo-controles button{
-      width:28px;
-      height:28px;
-      border-radius:8px;
+      width:36px;
+      height:36px;
+      border-radius:10px;
       border:1px solid var(--borde);
-      background:#fff;
-      font-size:16px;
+      background:#ffffff;
+      font-size:18px;
       line-height:1;
       cursor:pointer;
+      color:var(--azul);
+      box-shadow:0 1px 3px rgba(0,0,0,.12);
+    }
+
+    .campo-controles button:active{
+      transform:translateY(1px);
+      box-shadow:0 1px 1px rgba(0,0,0,.2);
     }
 
     .campo-controles input{
-      width:52px;
+      width:70px;
       text-align:center;
-      padding:3px 4px;
-      border-radius:8px;
+      padding:5px 6px;
+      border-radius:10px;
       border:1px solid var(--borde);
-      font-size:13px;
+      font-size:14px;
+      background:#ffffff;
+      color:var(--texto);
     }
 
     .campo-texto{
       display:flex;
       flex-direction:column;
-      margin-top:4px;
+      margin-top:10px;
+    }
+
+    .campo-texto .campo-label{
+      font-size:13px;
+      color:var(--texto-suave);
     }
 
     .campo-texto textarea{
-      margin-top:4px;
+      margin-top:6px;
       width:100%;
-      border-radius:8px;
+      border-radius:12px;
       border:1px solid var(--borde);
-      padding:6px 8px;
-      font-size:12px;
+      padding:8px 10px;
+      font-size:14px;
       resize:vertical;
-      min-height:48px;
+      min-height:140px;
+      background:#ffffff;
+      color:var(--texto);
+    }
+
+    .campo-texto textarea::placeholder{
+      color:#9ca3af;
     }
 
     .btn-guardar{
       width:100%;
-      margin-top:8px;
-      padding:8px 0;
+      margin-top:12px;
+      padding:10px 0;
       border:none;
       border-radius:999px;
-      background:var(--rojo);
-      color:#fff;
-      font-weight:600;
+      background:linear-gradient(90deg,var(--amarillo),#ffb400);
+      color:#111111;
+      font-weight:700;
       font-size:14px;
       cursor:pointer;
-      box-shadow:0 4px 10px rgba(0,0,0,.25);
+      box-shadow:0 4px 12px rgba(0,0,0,.25);
+      text-transform:uppercase;
+      letter-spacing:.08em;
     }
 
     .btn-guardar:active{
       transform:translateY(1px);
-      box-shadow:0 2px 6px rgba(0,0,0,.2);
+      box-shadow:0 2px 6px rgba(0,0,0,.3);
     }
 
     .comparacion{
-      margin-top:6px;
-      border-radius:14px;
+      margin-top:8px;
+      border-radius:16px;
       border:1px solid var(--borde);
-      padding:10px;
+      padding:10px 12px;
+      background:#ffffff;
     }
 
     .comparacion-titulo{
       font-size:13px;
       font-weight:600;
-      margin-bottom:4px;
+      margin-bottom:6px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--azul);
     }
 
     .comparacion-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:6px;
+      gap:8px;
       font-size:12px;
     }
 
     .comparacion-col{
-      background:#fafafa;
-      border-radius:10px;
-      padding:6px;
+      background:#f3f4f6;
+      border-radius:12px;
+      padding:6px 8px;
+      border:1px solid #e5e7eb;
     }
 
     .comparacion-col h3{
       margin:0 0 2px;
       font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--azul);
     }
 
     .comparacion-col p{
       margin:0;
+      color:var(--texto-suave);
     }
 
     .alerta{
-      margin-top:6px;
+      margin-top:8px;
       font-size:12px;
-      padding:6px 8px;
-      border-radius:10px;
-      background:#fff7e0;
-      border:1px solid #f3d27a;
+      padding:7px 8px;
+      border-radius:12px;
+      background:#fff7d6;
+      border:1px solid #facc15;
+      color:#854d0e;
     }
 
     .alerta strong{
-      color:var(--rojo-osc);
+      color:#92400e;
     }
   </style>
+
+  <!-- SDK Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
 <body>
+  <!-- INTRO SOLO LOGO -->
+  <div class="splash-overlay" id="splash">
+    <div class="splash-logo">
+      <div class="marca-splash">
+        <span class="quir">QUIR</span>
+        <span class="group">GROUP</span>
+        <span class="gnc-pill">GNC</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
   <div class="app">
     <div class="topbar">
-      <h1>Carga Taller GNC</h1>
+      <div class="marca">
+        <span class="quir">QUIR</span>
+        <span class="group">GROUP</span>
+        <span class="gnc-pill">GNC</span>
+      </div>
+      <div class="topbar-titulos">
+        <h1>Carga Taller</h1>
+        <div class="subfecha" id="subfecha"></div>
+      </div>
     </div>
-    <div class="subfecha" id="subfecha"></div>
 
     <div class="tabs">
       <button class="tab activa" data-taller="zipoli">Zipoli</button>
@@ -316,7 +494,7 @@
 
         <div class="campo-texto">
           <div class="campo-label">Observaciones (pruebas, instalaciones, etc.)</div>
-          <textarea id="inp-observaciones" placeholder="Ej: 2 pruebas demoradas, 1 instalación grande..."></textarea>
+          <textarea id="inp-observaciones" placeholder="Ej: 2 pruebas demoradas, 1 instalación grande, falta personal turno tarde..."></textarea>
         </div>
       </div>
 
@@ -342,6 +520,17 @@
   </div>
 
   <script>
+    // INTRO: auto-ocultar y tap para saltar
+    const splash = document.getElementById('splash');
+    function ocultarSplash(){
+      if(!splash.classList.contains('splash-hidden')){
+        splash.classList.add('splash-hidden');
+      }
+    }
+    setTimeout(ocultarSplash, 1800);
+    splash.addEventListener('click', ocultarSplash);
+
+    // Fecha del día
     const hoy = new Date();
     const fechaClave = hoy.toISOString().slice(0,10); // yyyy-mm-dd
 
@@ -351,6 +540,43 @@
       day:'numeric',
       month:'short'
     });
+
+    // --- Firebase INIT (Realtime Database gratis) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyB34UYCqVAnvN55YrapcVsoSbJOT-GyKIE",
+      authDomain: "appquiroga.firebaseapp.com",
+      projectId: "appquiroga",
+      storageBucket: "appquiroga.firebasestorage.app",
+      messagingSenderId: "940643500518",
+      appId: "1:940643500518:web:d7df08c47223256fc4d627",
+      measurementId: "G-6QF5YXY7X3",
+      // IMPORTANTE: asegurate que coincida con tu URL de Realtime Database
+      databaseURL: "https://appquiroga-default-rtdb.firebaseio.com"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const ROOT_PATH = "cargaTaller";
+    const diaRef = db.ref(ROOT_PATH + "/" + fechaClave);
+
+    // --- Estado en memoria ---
+    function baseTaller() {
+      return {
+        personal:0,
+        services:0,
+        pruebas:0,
+        instalaciones:0,
+        otros:0,
+        obs:'',
+        updated:null
+      };
+    }
+
+    let datos = {
+      fecha: fechaClave,
+      zipoli: baseTaller(),
+      alem:   baseTaller()
+    };
 
     const tabs = document.querySelectorAll('.tab');
     let tallerActual = 'zipoli';
@@ -373,43 +599,10 @@
     const cmpAlem = document.getElementById('cmp-alem');
     const alerta = document.getElementById('alerta');
 
-    const STORAGE_KEY = 'cargaTallerGNC';
-
-    function baseVacia() {
-      return {
-        fecha: fechaClave,
-        zipoli: {personal:0,services:0,pruebas:0,instalaciones:0,otros:0,obs:'',updated:null},
-        alem:   {personal:0,services:0,pruebas:0,instalaciones:0,otros:0,obs:'',updated:null}
-      };
-    }
-
-    function cargarDatos() {
-      const base = localStorage.getItem(STORAGE_KEY);
-      if (!base) return baseVacia();
-
-      try{
-        const parsed = JSON.parse(base);
-        if(parsed.fecha !== fechaClave) return baseVacia();
-
-        const plantilla = {personal:0,services:0,pruebas:0,instalaciones:0,otros:0,obs:'',updated:null};
-
-        const z = Object.assign({}, plantilla, parsed.zipoli || {});
-        const a = Object.assign({}, plantilla, parsed.alem   || {});
-
-        return {fecha: fechaClave, zipoli: z, alem: a};
-      }catch(e){
-        return baseVacia();
-      }
-    }
-
-    let datos = cargarDatos();
-
-    function guardarDatos() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
-    }
-
+    // --- UI helpers ---
     function llenarFormulario() {
-      const d = datos[tallerActual];
+      const d = datos[tallerActual] || baseTaller();
+
       inputs.personal.value       = d.personal;
       inputs.services.value       = d.services;
       inputs.pruebas.value        = d.pruebas;
@@ -444,8 +637,8 @@
         );
       }
 
-      const dz = datos.zipoli;
-      const da = datos.alem;
+      const dz = datos.zipoli || baseTaller();
+      const da = datos.alem   || baseTaller();
 
       cmpZipoli.textContent = texto(dz);
       cmpAlem.textContent   = texto(da);
@@ -464,6 +657,27 @@
       }
     }
 
+    // --- Listeners Realtime Database ---
+    function initRealtime() {
+      ['zipoli','alem'].forEach(taller => {
+        diaRef.child(taller).on('value', snap => {
+          const val = snap.val();
+          if(val){
+            datos[taller] = Object.assign(baseTaller(), val);
+          }else{
+            datos[taller] = baseTaller();
+          }
+          if(taller === tallerActual){
+            llenarFormulario();
+          }
+          actualizarComparacion();
+        });
+      });
+    }
+
+    initRealtime();
+
+    // --- Tabs ---
     tabs.forEach(tab=>{
       tab.addEventListener('click',()=>{
         tabs.forEach(t=>t.classList.remove('activa'));
@@ -473,6 +687,7 @@
       });
     });
 
+    // --- Botones +/- ---
     document.getElementById('panel-taller')
       .addEventListener('click',(e)=>{
         const btn = e.target;
@@ -487,9 +702,11 @@
         input.value = val;
       });
 
+    // --- Guardar en Realtime Database ---
     document.getElementById('btn-guardar')
       .addEventListener('click',()=>{
         const d = datos[tallerActual];
+
         d.personal      = parseInt(inputs.personal.value      || '0',10);
         d.services      = parseInt(inputs.services.value      || '0',10);
         d.pruebas       = parseInt(inputs.pruebas.value       || '0',10);
@@ -497,12 +714,25 @@
         d.otros         = parseInt(inputs.otros.value         || '0',10);
         d.obs           = inpObs.value.trim();
         d.updated       = new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
-        guardarDatos();
-        llenarFormulario();
-        actualizarComparacion();
+
+        const payload = {
+          personal: d.personal,
+          services: d.services,
+          pruebas: d.pruebas,
+          instalaciones: d.instalaciones,
+          otros: d.otros,
+          obs: d.obs,
+          updated: d.updated
+        };
+
+        diaRef.child(tallerActual).set(payload)
+          .catch(err=>{
+            console.error(err);
+            alert('Error al guardar en la base de datos: ' + err.message);
+          });
       });
 
-    // inicio
+    // Primera carga de la UI con valores por defecto
     llenarFormulario();
     actualizarComparacion();
   </script>
