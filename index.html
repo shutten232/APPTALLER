@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carga Taller GNC · Quirgroup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <!-- INTRO SOLO LOGO -->
+  <div class="splash-overlay splash-autohide" id="splash">
+    <div class="splash-logo">
+      <div class="marca-splash">
+        <span class="quir">QUIR</span>
+        <span class="group">GROUP</span>
+        <span class="gnc-pill">GNC</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="app">
+    <div class="topbar">
+      <div class="marca">
+        <span class="quir">QUIR</span>
+        <span class="group">GROUP</span>
+        <span class="gnc-pill">GNC</span>
+      </div>
+      <div class="topbar-titulos">
+        <h1>Carga Taller</h1>
+        <div class="subfecha" id="subfecha"></div>
+      </div>
+    </div>
+
+    <!-- Pestañas de modo: Hoy / Archivado -->
+    <div class="mode-tabs">
+      <button class="mode-tab activa" data-modo="hoy">Hoy</button>
+      <button class="mode-tab" data-modo="archivos">Registros</button>
+    </div>
+
+    <!-- MODO HOY -->
+    <div id="panel-hoy">
+      <div class="tabs">
+        <button class="tab activa" data-taller="zipoli">Zipoli</button>
+        <button class="tab" data-taller="alem">Alem</button>
+      </div>
+
+      <div class="hoy-layout">
+        <div class="hoy-left">
+          <div class="panel" id="panel-taller">
+            
+
+            <div class="grupo-campos">
+              <div class="campo">
+                <div class="campo-label">Personal en el taller</div>
+                <div class="campo-controles">
+                  <button data-op="-" data-campo="personal" aria-label="Restar">−</button>
+                  <input type="number" id="inp-personal" min="0" step="1" value="0" inputmode="numeric">
+                  <button data-op="+" data-campo="personal" aria-label="Sumar">+</button>
+                </div>
+              </div>
+
+              <div class="campo">
+                <div class="campo-label">Services GNC</div>
+                <div class="campo-controles">
+                  <button data-op="-" data-campo="services" aria-label="Restar">−</button>
+                  <input type="number" id="inp-services" min="0" step="1" value="0" inputmode="numeric">
+                  <button data-op="+" data-campo="services" aria-label="Sumar">+</button>
+                </div>
+              </div>
+
+              <div class="campo">
+                <div class="campo-label">Pruebas hidráulicas</div>
+                <div class="campo-controles">
+                  <button data-op="-" data-campo="pruebas" aria-label="Restar">−</button>
+                  <input type="number" id="inp-pruebas" min="0" step="1" value="0" inputmode="numeric">
+                  <button data-op="+" data-campo="pruebas" aria-label="Sumar">+</button>
+                </div>
+              </div>
+
+              <div class="campo">
+                <div class="campo-label">Instalaciones</div>
+                <div class="campo-controles">
+                  <button data-op="-" data-campo="instalaciones" aria-label="Restar">−</button>
+                  <input type="number" id="inp-instalaciones" min="0" step="1" value="0" inputmode="numeric">
+                  <button data-op="+" data-campo="instalaciones" aria-label="Sumar">+</button>
+                </div>
+              </div>
+
+              <div class="campo">
+                <div class="campo-label">Obleas</div>
+                <div class="campo-controles">
+                  <button data-op="-" data-campo="otros" aria-label="Restar">−</button>
+                  <input type="number" id="inp-otros" min="0" step="1" value="0" inputmode="numeric">
+                  <button data-op="+" data-campo="otros" aria-label="Sumar">+</button>
+                </div>
+              </div>
+
+              <div class="campo-texto">
+                <div class="campo-label">Observaciones (pruebas, instalaciones, etc.)</div>
+                <textarea id="inp-observaciones" placeholder="Ej: 2 pruebas demoradas, 1 instalación grande, falta personal turno tarde..."></textarea>
+              </div>
+            </div>
+            <div class="resumen-abajo" id="resumen-abajo">
+              <div class="panel-titulo" id="titulo-taller">Taller Zipoli – Hoy</div>
+
+            <p class="resumen-linea">
+              <span id="resumen-dia"></span>
+            </p>
+
+            <div class="resumen-linea">
+              Total trabajos: <span id="total-trabajos">0</span>
+            </div>
+
+            <div class="ultima-actualizacion" id="ultima-actualizacion">Sin registrar todavía</div>
+            <div class="ultima-actualizacion" id="estado-guardado">Listo</div>
+            </div>
+
+
+            <!-- El guardado es automático. Botón oculto por CSS, se mantiene por compatibilidad -->
+            <button class="btn-guardar" id="btn-guardar">Guardar</button>
+</div>
+
+          <div class="comparacion">
+            <div class="comparacion-titulo">Carga del día Zipoli vs Alem</div>
+            <div class="comparacion-grid">
+              <div class="comparacion-col">
+                <h3>Zipoli</h3>
+                <p id="cmp-zipoli">Sin datos</p>
+              </div>
+              <div class="comparacion-col">
+                <h3>Alem</h3>
+                <p id="cmp-alem">Sin datos</p>
+              </div>
+            </div>
+            <div class="alerta" id="alerta">
+              Todavía no cargaron nada hoy en ninguno de los dos talleres.
+            </div>
+          </div>
+        </div>
+</div>
+    </div>
+
+    <!-- MODO ARCHIVADO -->
+    <div class="panel" id="panel-archivos" style="display:none;">
+      <div class="panel-titulo">Registros (historial)</div>
+      <div class="reg-sum-grid" id="reg-sum-grid">
+        <div class="reg-sum-card">
+          <div class="reg-sum-title">Zipoli · Semana</div>
+          <div class="reg-sum-lines" id="sum-zipoli-semana">Cargando...</div>
+        </div>
+        <div class="reg-sum-card">
+          <div class="reg-sum-title">Zipoli · Mes</div>
+          <div class="reg-sum-lines" id="sum-zipoli-mes">Cargando...</div>
+        </div>
+        <div class="reg-sum-card">
+          <div class="reg-sum-title">Alem · Semana</div>
+          <div class="reg-sum-lines" id="sum-alem-semana">Cargando...</div>
+        </div>
+        <div class="reg-sum-card">
+          <div class="reg-sum-title">Alem · Mes</div>
+          <div class="reg-sum-lines" id="sum-alem-mes">Cargando...</div>
+        </div>
+      </div>
+
+      <button class="btn-imprimir" id="btn-imprimir-7">Imprimir últimos 7 días</button>
+
+      <div class="print-mes">
+        <div class="print-mes-label">Imprimir por mes (Zipoli + Alem)</div>
+        <select id="sel-mes">
+          <option value="">Elegí un mes con datos...</option>
+        </select>
+        <button class="btn-imprimir" id="btn-imprimir-mes">Imprimir mes</button>
+      </div>
+
+      <div id="archivos-contenido" class="archivos-lista">
+        <p class="resumen-linea">Cargando datos archivados...</p>
+      </div>
+
+      <!-- Área oculta para impresión -->
+      <div id="print-ultimos7" class="print-area"></div>
+    </div>
+  </div>
+
+  <!-- App JS (orden importante, NO ES MODULE) -->
+  <script defer src="js/config.js"></script>
+  <script defer src="js/state.js"></script>
+  <script defer src="js/ui.js"></script>
+  <script defer src="js/reports.js"></script>
+  <script defer src="js/archive.js"></script>
+  <script defer src="js/autosave.js"></script>
+  <script defer src="js/main.js"></script>
+</body>
+</html>
