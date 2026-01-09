@@ -10,7 +10,13 @@
   const db = firebase.database();
   const diaRef = db.ref(C.ROOT_PATH + "/" + S.fechaClave);
 
-  function initRealtime(){
+  
+
+  // Auth anónimo (para reglas RTDB con auth != null)
+  const auth = firebase.auth();
+
+  function startApp(){
+function initRealtime(){
     ['zipoli','alem'].forEach(taller=>{
       diaRef.child(taller).on('value', snap=>{
         const val = snap.val();
@@ -114,54 +120,20 @@
       }
     });
   }
+    // Start
+    initRealtime();
+    initArchivos();
+    window.AutoSave.init(db, diaRef);
 
-  // Archivar taller actual
-  const btnCerrar = document.getElementById('btn-cerrar-dia');
-  if(btnCerrar){
-    btnCerrar.addEventListener('click', ()=>{
-      const nombreTaller = (S.tallerActual === 'zipoli') ? 'Zipoli' : 'Alem';
-      if(!confirm('¿Archivar y reiniciar hoy el taller ' + nombreTaller + '?')) return;
-
-      const d = S.datos[S.tallerActual] || S.baseTaller();
-      const total = (d.services||0) + (d.pruebas||0) + (d.instalaciones||0) + (d.otros||0);
-      const cerradoA = new Date().toLocaleString('es-AR');
-
-      const archivePayload = {
-        personal: d.personal||0,
-        services: d.services||0,
-        pruebas: d.pruebas||0,
-        instalaciones: d.instalaciones||0,
-        otros: d.otros||0,
-        obs: d.obs || '',
-        updated: d.updated || null,
-        totalTrabajos: total,
-        cerradoA: cerradoA
-      };
-
-      const archiveRef = db.ref(C.ARCHIVE_ROOT + "/" + S.fechaClave + "/" + S.tallerActual);
-
-      archiveRef.set(archivePayload)
-        .then(()=> diaRef.child(S.tallerActual).set(S.baseTaller()))
-        .then(()=>{
-          S.datos[S.tallerActual] = S.baseTaller();
-          U.llenarFormulario();
-          U.actualizarComparacion();
-          if(window.Reports && window.Reports.render) window.Reports.render();
-          alert('Taller ' + nombreTaller + ' archivado y reiniciado.');
-        })
-        .catch(err=>{
-          console.error(err);
-          alert('Error al archivar: ' + err.message);
-        });
-    });
+    U.llenarFormulario();
+    U.actualizarComparacion();
+    if(window.Reports && window.Reports.render) window.Reports.render();
   }
 
-  // Start
-  initRealtime();
-  initArchivos();
-  window.AutoSave.init(db, diaRef);
-
-  U.llenarFormulario();
-  U.actualizarComparacion();
-  if(window.Reports && window.Reports.render) window.Reports.render();
+  auth.signInAnonymously().then(startApp).catch(err=>{
+    console.error(err);
+    alert('No se pudo autenticar (anon). Revisá reglas RTDB/Auth.\n' + err.message);
+    // Igual intentamos iniciar para que al menos la UI responda:
+    try{ startApp(); }catch(e){}
+  });
 })();
